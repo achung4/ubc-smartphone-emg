@@ -28,12 +28,14 @@ import android.os.SystemClock;
 import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Chronometer;
 import ceu.marten.bitadroid.R;
 import ceu.marten.model.DeviceConfiguration;
 import ceu.marten.model.io.DataManager;
 import ceu.marten.ui.NewRecordingActivity;
+import ceu.marten.ui.NewRecordingVideoActivity;
 import ceu.marten.ui.SettingsActivity;
 
 /**
@@ -94,6 +96,7 @@ public class BiopluxService extends Service {
 //	private String patientHealthNumber = "1234567890";
 	private String patientFName = "DEFAULT";
 	private String patientLName = "DEFAULT";
+	private String recordVideo = "No";
 	
 	// Variables for handling the chronometer
 	private Chronometer chronometer;
@@ -124,7 +127,9 @@ public class BiopluxService extends Service {
 				stopForeground(true);
 
 				if (timer == null) {
-					System.out.println("getting signals!!!");
+					//System.out.println("getting signals!!!");
+//					if(recordVideo.equals("Yes"))
+//						signalRecordingActivity();
 					timer = new Timer();
 					timer.scheduleAtFixedRate(new TimerTask() {
 						public void run() {
@@ -204,7 +209,7 @@ public class BiopluxService extends Service {
 //		patientHealthNumber = intent.getStringExtra("PHN").toString();
 		patientFName = intent.getStringExtra("patientFName").toString();
 		patientLName = intent.getStringExtra("patientLName").toString();
-		
+
 		//added to avoid the lagging - Brittaney
 		//if (configuration.getVisualizationFrequency()==1000) TIMER_TIME = 5;
 		//else if (configuration.getVisualizationFrequency()==100) TIMER_TIME = 50;

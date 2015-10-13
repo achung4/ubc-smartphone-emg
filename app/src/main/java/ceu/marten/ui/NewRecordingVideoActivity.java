@@ -18,10 +18,12 @@ import android.app.ActivityManager.RunningServiceInfo;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -39,6 +41,7 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -151,6 +154,8 @@ public class NewRecordingVideoActivity extends OrmLiteBaseActivity<DatabaseHelpe
     private MediaRecorder mediaRecorder;
     private SurfaceHolder surfaceHolder;
 
+    public static final String BIOPLUX_SIG = "biopluxSignal";
+
     /**
      * Listener for new started touches on graphs vertical labels
      */
@@ -248,10 +253,17 @@ public class NewRecordingVideoActivity extends OrmLiteBaseActivity<DatabaseHelpe
             Message msg = Message.obtain(null, BiopluxService.MSG_REGISTER_CLIENT);
             msg.replyTo = activityMessenger;
             try {
+                //System.out.println("getting signals!!!");
                 serviceMessenger.send(msg);
             } catch (RemoteException e) {
                 Log.e(TAG, "service conection failed", e);
                 displayConnectionErrorDialog(10); // 10 -> fatal error
+            }
+            // VIDEO
+            try{
+                mediaRecorder.start();
+            } catch(final Exception e){
+                // System.out.println("Exception in thread");
             }
         }
 
@@ -473,6 +485,17 @@ public class NewRecordingVideoActivity extends OrmLiteBaseActivity<DatabaseHelpe
         mediaRecorder.setOutputFile(classContext.getFilesDir() + "/" + name + time + Constants.MP4_FILE_EXTENTION);
         mediaRecorder.setMaxDuration(60000); //set maximum duration 60 sec.
         mediaRecorder.setMaxFileSize(50000000); //set maximum file size 50M
+        mediaRecorder.setOnInfoListener(new MediaRecorder.OnInfoListener(){
+            @Override
+            public void onInfo(MediaRecorder mr, int what, int extra){
+                if(what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED ||
+                        what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_FILESIZE_REACHED ){
+                    stopRecording();
+                }
+
+            }
+        });
+
         try {
             mediaRecorder.prepare();
         } catch (IllegalStateException e) {
@@ -755,10 +778,6 @@ public class NewRecordingVideoActivity extends OrmLiteBaseActivity<DatabaseHelpe
      * Stops and saves the recording in database and data as zip file
      */
     private void stopRecording() {
-        // VIDEO - stop recording and release camera
-        mediaRecorder.stop();
-        releaseMediaRecorder();
-
         // TEXT stuff
         savingDialog.show();
         //stopChronometer();
@@ -767,6 +786,10 @@ public class NewRecordingVideoActivity extends OrmLiteBaseActivity<DatabaseHelpe
         stopService(new Intent(NewRecordingVideoActivity.this, BiopluxService.class));
         uiMainbutton.setText(getString(R.string.nr_button_start));
         drawState = true;
+
+        // VIDEO - stop recording and release camera
+        mediaRecorder.stop();
+        releaseMediaRecorder();
     }
 
     /**
@@ -823,6 +846,7 @@ public class NewRecordingVideoActivity extends OrmLiteBaseActivity<DatabaseHelpe
                             intent.putExtra(KEY_CONFIGURATION, recordingConfiguration);
                             intent.putExtra("patientFName", patientFName);
                             intent.putExtra("patientLName", patientLName);
+//                            intent.putExtra("video", mediaRecorder);
 //							intent.putExtra("PHN", patientHealthNumber);
                             startService(intent);
                             bindToService();
@@ -836,11 +860,12 @@ public class NewRecordingVideoActivity extends OrmLiteBaseActivity<DatabaseHelpe
                                 Toast.makeText(classContext, "Bluetooth Connection Error", Toast.LENGTH_LONG).show();
 
                             // VIDEO
-                            try{
-                                mediaRecorder.start();
-                            } catch(final Exception e){
-                                // System.out.println("Exception in thread");
-                            }
+//
+//                            try{
+//                                mediaRecorder.start();
+//                            } catch(final Exception e){
+//                                // System.out.println("Exception in thread");
+//                            }
                         }
                     }
                 });
@@ -856,7 +881,6 @@ public class NewRecordingVideoActivity extends OrmLiteBaseActivity<DatabaseHelpe
 
         return false;
     }
-
 
     /**
      * Displays an error dialog with corresponding message based on the
@@ -1098,6 +1122,7 @@ public class NewRecordingVideoActivity extends OrmLiteBaseActivity<DatabaseHelpe
 
     @Override
     protected void onPause() {
+        //savingDialog.dismiss();
         try {
             unbindFromService();
         } catch (Throwable t) {
@@ -1126,6 +1151,7 @@ public class NewRecordingVideoActivity extends OrmLiteBaseActivity<DatabaseHelpe
      */
     @Override
     protected void onDestroy() {
+        //savingDialog.dismiss();
         super.onDestroy();
         Log.i(TAG, "onDestroy()");
     }

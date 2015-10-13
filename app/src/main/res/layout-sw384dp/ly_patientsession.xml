@@ -16,7 +16,7 @@
     <Button
         android:id="@+id/button2"
         android:layout_width="wrap_content"
-        android:layout_height="80dp"
+        android:layout_height="50dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:background="@drawable/button_blue"
@@ -32,16 +32,16 @@
         android:id="@+id/Button01"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/button2"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="41dp"
         android:background="@drawable/button"
         android:paddingLeft="50dip"
         android:paddingRight="40dip"
         android:text="Saved Recordings"
         android:textColor="@android:color/black"
-        android:textSize="16sp" 
-        android:onClick="onClickedSavedData" />
+        android:textSize="16sp"
+        android:onClick="onClickedSavedData"
+        android:layout_below="@+id/buttonVideo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" />
 
     <Button
         android:id="@+id/Button02"
@@ -50,13 +50,13 @@
         android:layout_alignLeft="@+id/Button01"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/Button01"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/button"
         android:paddingLeft="30dip"
         android:paddingRight="20dip"
         android:text="Edit Patient Information"
         android:textColor="@android:color/black"
-        android:textSize="16sp" 
+        android:textSize="16sp"
         android:onClick="onClickedSetPatientInfo"/>
 
     <TextView
@@ -73,5 +73,20 @@
         android:text="PATIENT NAME"
         android:textColor="@android:color/black"
         android:textSize="16sp" />
+
+    <Button
+        android:background="@drawable/button_blue"
+        android:drawableEnd="@drawable/start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="NEW RECORDING with VIDEO"
+        android:id="@+id/buttonVideo"
+        android:layout_below="@+id/button2"
+        android:layout_centerHorizontal="true"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        android:paddingLeft="10dip"
+        android:paddingRight="10dip"
+        android:onClick="onClickedStartVideo" />
 
 </RelativeLayout>

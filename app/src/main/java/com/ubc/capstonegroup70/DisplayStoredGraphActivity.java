@@ -171,8 +171,8 @@ public class DisplayStoredGraphActivity extends Activity {
 
             public void onPrepared(MediaPlayer mediaPlayer) {
                 // close the progress bar and play the video
-                //progressDialog.dismiss();
-                //if we have a position on savedInstanceState, the video playback should start from here
+                // progressDialog.dismiss();
+                // if we have a position on savedInstanceState, the video playback should start from here
                 myVideoView.seekTo(position);
 
                 /*if (position == 0) {

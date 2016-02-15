@@ -11,16 +11,15 @@
 
     <!-- Required to access Google Play Licensing -->
     <uses-permission android:name="com.android.vending.CHECK_LICENSE" />
-    
+
     <!-- Required to download files from Google Play -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <!-- Required to pool the state of the network connection and respond to changes -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <!-- Required to check whether Wi-Fi is enabled -->
-    <uses-permission android:name="android.permission.access_wifi_state"/>
-
+    <uses-permission android:name="android.permission.access_wifi_state" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -33,24 +32,22 @@
 
     <uses-feature android:name="android.hardware.camera" />
 
-
-
     <application
         android:allowBackup="true"
         android:icon="@drawable/sunshine"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
 
-        <!--<provider android:name="com.ubc.capstonegroup70.CustomAPEZProvider"-->
-            <!--android:authorities="com.ubc.capstonegroup70.provider.CustomAPEZProvider"-->
-            <!--android:exported="false"-->
-            <!--android:multiprocess="true"-->
-            <!-->-->
-            <!--<meta-data android:name="mainVersion"-->
-                <!--android:value="1"></meta-data>-->
-            <!--<meta-data android:name="patchVersion"-->
-                <!--android:value="2"></meta-data>-->
-        <!--</provider>-->
+        <!-- <provider android:name="com.ubc.capstonegroup70.CustomAPEZProvider" -->
+        <!-- android:authorities="com.ubc.capstonegroup70.provider.CustomAPEZProvider" -->
+        <!-- android:exported="false" -->
+        <!-- android:multiprocess="true" -->
+        <!-- > -->
+        <!-- <meta-data android:name="mainVersion" -->
+        <!-- android:value="1"></meta-data> -->
+        <!-- <meta-data android:name="patchVersion" -->
+        <!-- android:value="2"></meta-data> -->
+        <!-- </provider> -->
 
         <activity
             android:name="ceu.marten.ui.HomeActivity"
@@ -112,9 +109,9 @@
         <activity
             android:name="com.ubc.capstonegroup70.DisplayStoredGraphActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="landscape"
             android:label="@string/display_stored_graph_label"
-            android:parentActivityName="com.ubc.capstonegroup70.PatientSessionActivity" >
+            android:parentActivityName="com.ubc.capstonegroup70.PatientSessionActivity"
+            android:screenOrientation="landscape" >
         </activity>
 
         <service
@@ -124,10 +121,17 @@
         <activity
             android:name="ceu.marten.ui.NewRecordingVideoActivity"
             android:configChanges="keyboardHidden|screenSize"
-            android:screenOrientation="landscape"
-            android:launchMode="singleTask"
             android:label="@string/new_recordings_label"
-            android:parentActivityName="ceu.marten.ui.ConfigurationsActivity">
+            android:launchMode="singleTask"
+            android:parentActivityName="ceu.marten.ui.ConfigurationsActivity"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.ubc.capstonegroup70.ReplayStoredGraphActivity"
+            android:label="@string/title_activity_replay_stored_graph"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:parentActivityName="com.ubc.capstonegroup70.PatientSessionActivity"
+            android:screenOrientation="landscape">
         </activity>
     </application>
 

@@ -96,6 +96,8 @@ public class PatientSessionActivity extends Activity {//implements android.widge
 	private static final int DIALOG_EXPORT = 1001;
 	private static final int DIALOG_DELETE = 1002;
 	private static final int DIALOG_EMPTY = 1003;
+
+	private String mode;
 	
 	ListAdapter adapter;
 
@@ -428,6 +430,7 @@ public class PatientSessionActivity extends Activity {//implements android.widge
 		
 	
 	public void onClickedSavedData(View view) {
+		mode = "savedData";
 		// Start FileExplorer    
 	    if(!loadFileList()) {
         	showDialog(DIALOG_LOAD_FILE);
@@ -439,10 +442,27 @@ public class PatientSessionActivity extends Activity {//implements android.widge
         }
 		overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 	}
+
+	/**
+	 * Button that replays signal and video
+	 * @author Angelo Chung 2015
+	 * @param view
+	 */
+	public void onClickedReplay(View view) {
+		mode = "replayData";
+		// Start FileExplorer
+		if(!loadFileList()) {
+			showDialog(DIALOG_LOAD_FILE);
+			Log.d(TAG, "No files were found for this patient.");
+		}
+		else {
+			showDialog(DIALOG_EMPTY);
+			Log.d(TAG, path.getAbsolutePath());
+		}
+		overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+	}
 	
-	
-	
-	/*
+	/**
 	 * Android File Explore
 	 * 
 	 * Copyright 2011 Manish Burman
@@ -641,11 +661,20 @@ public class PatientSessionActivity extends Activity {//implements android.widge
 	          // File picked
 	          else {
 	            // Perform action with file picked
-	            Log.d(TAG,"FILE EXPLORE: Chosen file is: " + chosenFile);
-	            Intent intent = new Intent(PatientSessionActivity.this, DisplayStoredGraphActivity.class);
-	            intent.putExtra("FILE_NAME", chosenFile);
-	            intent.putExtra("PATIENT_NAME", newPatient.getPatientFirstName() + " " + newPatient.getPatientLastName());
-	            startActivity(intent);
+	            Log.d(TAG, "FILE EXPLORE: Chosen file is: " + chosenFile);
+
+				  if(mode.equals("replayData")) {
+					  Intent intent = new Intent(PatientSessionActivity.this, ReplayStoredGraphActivity.class);
+					  intent.putExtra("FILE_NAME", chosenFile);
+					  intent.putExtra("PATIENT_NAME", newPatient.getPatientFirstName() + " " + newPatient.getPatientLastName());
+					  startActivity(intent);
+				  }
+				  else {
+					  Intent intent = new Intent(PatientSessionActivity.this, DisplayStoredGraphActivity.class);
+					  intent.putExtra("FILE_NAME", chosenFile);
+					  intent.putExtra("PATIENT_NAME", newPatient.getPatientFirstName() + " " + newPatient.getPatientLastName());
+					  startActivity(intent);
+				  }
 	          }
 
 	        }

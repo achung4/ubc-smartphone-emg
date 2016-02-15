@@ -300,7 +300,7 @@ public class NewRecordingVideoActivity extends OrmLiteBaseActivity<DatabaseHelpe
 
                 //else
                 graphs[i].getSerie().appendData(new GraphViewData(xValue, data[displayChannelPosition[i]]), goToEnd, maxDataCount);
-                //System.out.println(xValue + " : " + data[displayChannelPosition[i]]);
+
             }
         }
     }
@@ -778,11 +778,17 @@ public class NewRecordingVideoActivity extends OrmLiteBaseActivity<DatabaseHelpe
      * Stops and saves the recording in database and data as zip file
      */
     private void stopRecording() {
+//        long timeEnded = System.currentTimeMillis();
+//        System.out.println("_xvalue : " + timeEnded);
         // TEXT stuff
         savingDialog.show();
         //stopChronometer();
         sendRecordingDuration();
         unbindFromService();
+//        Intent i = new Intent(NewRecordingVideoActivity.this, BiopluxService.class);
+//        i.putExtra("terminate", "terminate recording" );
+//        i.putExtra("timeEnded", timeEnded);
+//        startService(i);
         stopService(new Intent(NewRecordingVideoActivity.this, BiopluxService.class));
         uiMainbutton.setText(getString(R.string.nr_button_start));
         drawState = true;

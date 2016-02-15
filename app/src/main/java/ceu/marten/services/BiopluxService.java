@@ -111,6 +111,9 @@ public class BiopluxService extends Service {
 	// Messenger with interface for sending messages from the service
 	private Messenger client = null;
 
+	// time started getting data
+	private long timeStarted;
+	private long timeEnded;
 	/**
 	 * Handler of incoming messages from clients.
 	 */
@@ -127,9 +130,6 @@ public class BiopluxService extends Service {
 				stopForeground(true);
 
 				if (timer == null) {
-					//System.out.println("getting signals!!!");
-//					if(recordVideo.equals("Yes"))
-//						signalRecordingActivity();
 					timer = new Timer();
 					timer.scheduleAtFixedRate(new TimerTask() {
 						public void run() {
@@ -202,6 +202,14 @@ public class BiopluxService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.e(TAG, "Iniciamos conexion BITALINO");
 
+		// catch if stopService() is called instead of startService()
+//		final String terminate = intent.getStringExtra("terminate");
+//		if(terminate!=null){
+//			timeEnded = intent.getLongExtra("timeEnded", 1);
+//			System.out.println("bioplux time "+timeEnded);
+//			stopSelf();
+//		}
+
 		String recordingName = intent.getStringExtra(
 				NewRecordingActivity.KEY_RECORDING_NAME).toString();
 		configuration = (DeviceConfiguration) intent
@@ -223,10 +231,8 @@ public class BiopluxService extends Service {
 																	// number of
 																	// frames
 
-		Log.i(TAG,
-				"numberOfFrames " + numberOfFrames + " receptionFrequency() "
-						+ configuration.getVisualizationFrequency());
-		Log.i(TAG, "samplingFrames " + samplingFrames);
+		Log.i(TAG, "numberOfFrames " + numberOfFrames + " receptionFrequency "	+ configuration.getVisualizationFrequency());
+		Log.i(TAG, "samplingFrames " + samplingFrames + " samplingFrequency " + configuration.getSamplingFrequency());
 		// Revisar frames = new Device.Frame[numberOfFrames];
 		// Revisar for (mes.length; i++){
 		// Revisar frames[i] = new Frame();
@@ -236,7 +242,8 @@ public class BiopluxService extends Service {
 			//Once phone is connected to the Bitalino, start the chronometer for accurate timing
 			//@author Caleb Ng (2015)
 			startChronometer();
-			dataManager = new DataManager(this, recordingName + currentDateandTime, configuration, patientFName, patientLName);
+			timeStarted = System.currentTimeMillis();
+			dataManager = new DataManager(this, recordingName + currentDateandTime, configuration, patientFName, patientLName, timeStarted);
 			createNotification();
 		}
 		return START_NOT_STICKY; // do not re-create service if system kills it
@@ -270,8 +277,7 @@ public class BiopluxService extends Service {
 			if (samplingCounter++ >= samplingFrames) {
 				// calculates x value of graphs
 				timeCounter++;
-				xValue = timeCounter / configuration.getSamplingFrequency()
-						* 1000;
+				xValue = timeCounter / configuration.getSamplingFrequency()	* 1000;
 				// gets default share preferences with multi-process flag
 
 				if (clientActive || !clientActive && drawInBackground)
@@ -379,30 +385,30 @@ public class BiopluxService extends Service {
 	 */
 	// comentario �intentar optimizar el env�o de datos?
 	private void sendFrameToActivity(BITalinoFrame frame) {
+
 		Bundle b = new Bundle();
-		b.putDouble(KEY_X_VALUE, xValue);
+		b.putDouble(KEY_X_VALUE, (System.currentTimeMillis() - timeStarted));
 		// Revisar
 
-		
-		
 		//Bitalino always send 6 channels but only active which you selected
 		ArrayList<Integer> activeChannels = configuration.getActiveChannels();
 		int[] activeChannelsArray = convertToBitalinoChannelsArray(activeChannels);
 				
-		short[] frameShort = new short[6];
+//		short[] frameShort = new short[6];
 		double[] frameDouble = new double[6];
 		
 		for(int indTemp=0;indTemp<6;indTemp++){
-			frameShort[indTemp]=0;
+//			frameShort[indTemp]=0;
 			frameDouble[indTemp]=0;
 		}
 
 		for(int ind=0; ind<activeChannelsArray.length;ind++){
-			frameShort[ind]=(short) (frame.getAnalog(activeChannelsArray[ind]));
+//			frameShort[ind]=(short) (frame.getAnalog(activeChannelsArray[ind]));
 			frameDouble[ind]= (SensorDataConverter.scaleEMG(activeChannelsArray[ind], frame.getAnalog(activeChannelsArray[ind])));
 		}
 		
 		b.putDoubleArray(KEY_FRAME_DATA, frameDouble);
+		System.out.println("_xValue : " + (System.currentTimeMillis() - timeStarted) + " _yValue : " + frameDouble);
 //		b.putShortArray(KEY_FRAME_DATA, frameShort);
 		Message message = Message.obtain(null, MSG_DATA);
 		message.setData(b);
@@ -473,6 +479,7 @@ public class BiopluxService extends Service {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		final Long timeEnded = System.currentTimeMillis();
 		if (!killServiceError) {
 			stopService();
 			new Thread() {
@@ -480,7 +487,7 @@ public class BiopluxService extends Service {
 				public void run() {
 					boolean errorSavingRecording = false;
 					//if (!dataManager.saveAndCompressFile(client)) {
-					if(!dataManager.saveFile(client)){
+					if(!dataManager.saveFile(client, timeEnded)){
 						errorSavingRecording = true;
 						sendErrorToActivity(CODE_ERROR_SAVING_RECORDING);
 					}

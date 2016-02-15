@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:columnCount="2"
+    android:rowCount="2"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center|fill"
+        android:layout_row="0"
+        android:layout_column="0">
+
+        <LinearLayout
+            android:id="@+id/graphSpace"
+            android:layout_width="match_parent"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:layout_columnSpan="3"
+            android:layout_gravity="fill|center"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:layout_height="fill_parent">
+
+            <TextView
+                android:id="@+id/graph_yAxis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:rotation="270"
+                android:text=""
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical" />
+
+            <LinearLayout
+                android:id="@+id/dataGraph"
+                android:gravity="fill_horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal" >
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/videoLayoutId">
+
+            <com.ubc.capstonegroup70.CustomVideoView
+                android:layout_width="320dp"
+                android:layout_height="240dp"
+                android:id="@+id/videoView"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|center_horizontal"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="1dp"
+        android:layout_row="1"
+        android:layout_column="0"
+        android:layout_columnSpan="1"
+        android:layout_marginLeft="80dp">
+        <TextView
+            android:id="@+id/graph_xAxis"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="" />
+    </LinearLayout>
+
+    <!--<MediaController-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/mediaController"-->
+        <!--android:layout_row="2"-->
+        <!--android:layout_column="0"-->
+        <!--android:layout_gravity="fill" />-->
+
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="New Button"-->
+        <!--android:id="@+id/button"-->
+        <!--android:layout_gravity="right"-->
+        <!--android:onClick="onClickedReplay" />-->
+
+</GridLayout>

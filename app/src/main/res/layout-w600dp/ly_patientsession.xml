@@ -1,0 +1,110 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@android:color/white" >
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/lyHeader"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/bcchildrens" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:background="@drawable/button_blue"
+        android:drawableEnd="@drawable/start"
+        android:onClick="onClickedStart"
+        android:paddingLeft="45dip"
+        android:paddingRight="35dip"
+        android:text="NEW RECORDING"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="25dp"
+        android:layout_marginStart="25dp" />
+
+    <Button
+        android:id="@+id/Button01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button"
+        android:paddingLeft="50dip"
+        android:paddingRight="40dip"
+        android:text="Saved Recordings"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" 
+        android:onClick="onClickedSavedData"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/button2"
+        android:layout_toEndOf="@+id/button2"
+        android:layout_marginLeft="28dp"
+        android:layout_marginStart="28dp" />
+
+    <Button
+        android:id="@+id/Button02"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button"
+        android:paddingLeft="30dip"
+        android:paddingRight="20dip"
+        android:text="Edit Patient Information"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:onClick="onClickedSetPatientInfo"
+        android:layout_below="@+id/replay"
+        android:layout_alignLeft="@+id/replay"
+        android:layout_alignStart="@+id/replay" />
+
+    <TextView
+        android:id="@+id/lyHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:onClick="onClickedSetPatientInfo"
+        android:paddingBottom="10dip"
+        android:paddingTop="10dip"
+        android:text="PATIENT NAME"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
+
+    <Button
+        android:background="@drawable/button_blue"
+        android:drawableEnd="@drawable/start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="NEW RECORDING with VIDEO"
+        android:id="@+id/buttonVideo"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        android:paddingLeft="10dip"
+        android:paddingRight="10dip"
+        android:onClick="onClickedStartVideo"
+        android:layout_below="@+id/button2"
+        android:layout_alignRight="@+id/button2"
+        android:layout_alignEnd="@+id/button2" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button"
+        android:paddingLeft="50dip"
+        android:paddingRight="40dip"
+        android:text="Replay"
+        android:id="@+id/replay"
+        android:onClick="onClickedReplay"
+        android:layout_alignBottom="@+id/buttonVideo"
+        android:layout_alignLeft="@+id/Button01"
+        android:layout_alignStart="@+id/Button01" />
+
+</RelativeLayout>

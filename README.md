@@ -1,1 +1,0 @@
-# ubc-smartphone-emg

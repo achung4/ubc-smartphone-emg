@@ -257,5 +257,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="replay_video">Show Video</string>
+    <string name="title_activity_replay_stored_graph">ReplayStoredGraphActivity</string>
 
 </resources>

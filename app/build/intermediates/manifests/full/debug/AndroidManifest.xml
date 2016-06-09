@@ -126,6 +126,13 @@
             android:parentActivityName="ceu.marten.ui.ConfigurationsActivity"
             android:screenOrientation="landscape" >
         </activity>
+        <activity
+            android:name="com.ubc.capstonegroup70.ReplayStoredGraphActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_replay_stored_graph"
+            android:parentActivityName="com.ubc.capstonegroup70.PatientSessionActivity"
+            android:screenOrientation="landscape" >
+        </activity>
     </application>
 
 </manifest>

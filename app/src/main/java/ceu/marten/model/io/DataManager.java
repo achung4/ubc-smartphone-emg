@@ -71,9 +71,11 @@ public class DataManager {
 	private String PInfoDirectory = "/storage/emulated/0/Bioplux/Patients/";
 	private String PatientInfoExtension = "INFO.txt";	
 	private PatientClass newPatient;
-	
+
+	private Long timeStarted;
+
 	private Context context;
-	
+
 	/**
 	 * Constructor. Initializes the number of channels activated, the outStream
 	 * write and the Buffered writer
@@ -97,10 +99,11 @@ public class DataManager {
 	 * write and the Buffered writer
 	 * @author Caleb Ng (2015)
 	 */
-	public DataManager(Context serviceContext, String _recordingName, DeviceConfiguration _configuration, String patientFName, String patientLName) {
+	public DataManager(Context serviceContext, String _recordingName, DeviceConfiguration _configuration, String patientFName, String patientLName, Long timeStarted) {
 		this.context = serviceContext;
 		this.recordingName = _recordingName;
 		this.configuration = _configuration;
+		this.timeStarted = timeStarted;
 		newPatient = new PatientClass();
 		String patientName = patientFName + " " + patientLName;
 		File file = new File(PInfoDirectory + patientName + PatientInfoExtension);
@@ -418,12 +421,19 @@ public class DataManager {
 	 * 
 	 * Returns true if the text file was written successfully or false if an
 	 * exception was caught
+	 *
+	 * Edited:
+	 * @author Angelo Chung 2015
+	 * @param timeEnded the time the client ended recording
 	 */
-	private boolean appendEDFHeader() {
+	private boolean appendEDFHeader(Long timeEnded) {
 		
 		DateFormat dateFormat = DateFormat.getDateTimeInstance();
 		String tmpFilePath = context.getFilesDir() + "/" + Constants.TEMP_FILE;
 		Date date = new Date();
+		System.out.println("_time started: " + timeStarted);
+		System.out.println("_time ended: "+ timeEnded);
+		Long recordingDuration = timeEnded - timeStarted;
 		OutputStreamWriter out = null;
 		BufferedInputStream origin = null;
 		BufferedOutputStream dest = null;
@@ -499,7 +509,7 @@ public class DataManager {
 				System.out.print("ERROR: No matches found!");
 			}
 			String headerSize = extendString("512", 8);
-			String reserved44 = extendString("", 44);
+			String reserved44 = extendString("duration"+recordingDuration, 44);
 			String numberRecords = extendString("1", 8);
 			String durationRecord = extendString(duration, 8);
 			String numberSignals = extendString("1", 4);
@@ -680,6 +690,7 @@ public class DataManager {
 
 	/**
 	 * Puts all files .txt, .mp4, etc. into a folder.
+	 * @author Angelo Chung 2015
 	 * @return true if successful, and false otherwise.
 	 */
 	private boolean fileInFolder(){
@@ -778,34 +789,35 @@ public class DataManager {
 		return true;
 	}
 	
-	/**
-	 * Saves and compress a recording. Returns true if the writing and the
-	 * compression were successful or false if either one of them failed
-	 */
-	public boolean saveAndCompressFile(Messenger client) {
-		this.client = client;
-		if(!enoughStorageAvailable())
-			return false;
-//		if (!appendHeader())
+//	/**
+//	 * Saves and compress a recording. Returns true if the writing and the
+//	 * compression were successful or false if either one of them failed
+//	 */
+//	public boolean saveAndCompressFile(Messenger client) {
+//		this.client = client;
+//		if(!enoughStorageAvailable())
 //			return false;
-		if (!appendEDFHeader())
-			return false;
-		if (!compressFile())
-			return false;
-		return true;
-	}
+////		if (!appendHeader())
+////			return false;
+//		if (!appendEDFHeader())
+//			return false;
+//		if (!compressFile())
+//			return false;
+//		return true;
+//	}
 
 	/**
 	 * Saves recording.
 	 * @author Angelo Chung 2015
 	 * @param client the client
+	 * @param timeEnded the time client stops recording
 	 * @return true if writing to folder is successful otherwise false
 	 */
-	public boolean saveFile(Messenger client){
+	public boolean saveFile(Messenger client, long timeEnded){
 		this.client = client;
 		if(!enoughStorageAvailable())
 			return false;
-		if(!appendEDFHeader())
+		if(!appendEDFHeader(timeEnded))
 			return false;
 		if(!fileInFolder())
 			return false;

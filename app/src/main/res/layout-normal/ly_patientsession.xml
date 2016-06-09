@@ -47,17 +47,15 @@
         android:id="@+id/Button02"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/Button01"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/Button01"
-        android:layout_marginTop="15dp"
         android:background="@drawable/button"
         android:paddingLeft="30dip"
         android:paddingRight="20dip"
         android:text="Edit Patient Information"
         android:textColor="@android:color/black"
-        android:textSize="16sp" 
-        android:onClick="onClickedSetPatientInfo"/>
+        android:textSize="16sp"
+        android:onClick="onClickedSetPatientInfo"
+        android:layout_below="@+id/replay"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/lyHeader"
@@ -88,5 +86,17 @@
         android:paddingLeft="10dip"
         android:paddingRight="10dip"
         android:onClick="onClickedStartVideo" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button"
+        android:paddingLeft="50dip"
+        android:paddingRight="40dip"
+        android:text="Replay"
+        android:id="@+id/replay"
+        android:onClick="onClickedReplay"
+        android:layout_below="@+id/Button01"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

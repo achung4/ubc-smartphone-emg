@@ -102,8 +102,8 @@
             android:id="@+id/videoLayoutId">
 
             <VideoView
-                android:layout_width="640px"
-                android:layout_height="480px"
+                android:layout_width="320dp"
+                android:layout_height="240dp"
                 android:id="@+id/videoView"
                 android:layout_weight="1" />
 

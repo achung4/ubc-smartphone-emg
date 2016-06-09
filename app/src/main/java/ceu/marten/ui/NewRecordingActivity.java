@@ -180,7 +180,7 @@ public class NewRecordingActivity extends OrmLiteBaseActivity<DatabaseHelper> im
 				//	calibrate(msg.getData().getDouble(BiopluxService.KEY_X_VALUE),msg.getData().getDoubleArray(BiopluxService.KEY_FRAME_DATA));
 				//	first = false;
 				//}
-						
+
 				//else 
 				appendDataToGraphs(
 						msg.getData().getDouble(BiopluxService.KEY_X_VALUE),
@@ -275,6 +275,8 @@ public class NewRecordingActivity extends OrmLiteBaseActivity<DatabaseHelper> im
 				//else 
 				graphs[i].getSerie().appendData(new GraphViewData(xValue,data[displayChannelPosition[i]]), goToEnd, maxDataCount);
 				//System.out.println(xValue + " : " + data[displayChannelPosition[i]]);
+				System.out.print("datapoints : ");
+				System.out.println(xValue + " : " + data[displayChannelPosition[i]]);
 			}
 		}
 	}
